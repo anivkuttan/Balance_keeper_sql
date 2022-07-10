@@ -8,6 +8,17 @@ class EditPage extends StatefulWidget {
 }
 
 class _EditPageState extends State<EditPage> {
+  late TextEditingController nameController;
+  late TextEditingController taskNameController;
+  late TextEditingController discriptionController;
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController();
+    taskNameController = TextEditingController();
+    discriptionController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +39,7 @@ class _EditPageState extends State<EditPage> {
                     width: 150,
                     height: 100,
                     child: TextFormField(
+                      controller: nameController,
                       decoration: const InputDecoration(
                         label: Text('Name'),
                         border: OutlineInputBorder(),
@@ -44,8 +56,9 @@ class _EditPageState extends State<EditPage> {
                 height: 10,
               ),
               TextFormField(
+                controller: taskNameController,
                 decoration: const InputDecoration(
-                  label: Text('Amount'),
+                  label: Text('TaskName'),
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -79,6 +92,7 @@ class _EditPageState extends State<EditPage> {
                 ),
               ),
               TextFormField(
+                controller: discriptionController,
                 decoration: const InputDecoration(
                   label: Text('Discription'),
                   border: OutlineInputBorder(),
@@ -88,7 +102,6 @@ class _EditPageState extends State<EditPage> {
               const SizedBox(
                 height: 20,
               ),
-        
               SizedBox(
                 width: double.infinity,
                 height: 50,
