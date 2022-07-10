@@ -1,3 +1,5 @@
+import 'package:balance_keeper_sql/Pages/edit_page.dart';
+import 'package:balance_keeper_sql/Pages/view_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -117,7 +119,10 @@ class _HomePageState extends State<HomePage> {
               width: double.maxFinite,
               child: ElevatedButton(
                 onPressed: () {},
-                child: const Text('Add Amount To all Person'),
+                child: const Text(
+                  'Add Amount To all Person',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ),
             const SizedBox(height: 30),
@@ -125,8 +130,16 @@ class _HomePageState extends State<HomePage> {
               height: 60,
               width: double.maxFinite,
               child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('Add Amount To Some Person'),
+                onPressed: () {
+                    Route route = MaterialPageRoute(builder: (context) {
+                    return const EditPage();
+                  });
+                  Navigator.of(context).push(route);
+                },
+                child: const Text(
+                  'Add Amount To Some Person',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ),
             const SizedBox(height: 30),
@@ -134,8 +147,16 @@ class _HomePageState extends State<HomePage> {
               height: 60,
               width: double.maxFinite,
               child: ElevatedButton(
-                onPressed: () {},
-                child: const Text('View all Person'),
+                onPressed: () {
+                  Route route = MaterialPageRoute(builder: (context) {
+                    return const ViewPage();
+                  });
+                  Navigator.of(context).push(route);
+                },
+                child: const Text(
+                  'View all Person',
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
             ),
           ],
