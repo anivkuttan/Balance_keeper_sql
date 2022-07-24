@@ -2,6 +2,8 @@ import 'package:balance_keeper_sql/Pages/home_page.dart';
 import 'package:balance_keeper_sql/Pages/notes_page.dart';
 import 'package:flutter/material.dart';
 
+import 'edit_page.dart';
+
 class StartingPage extends StatefulWidget {
   const StartingPage({Key? key}) : super(key: key);
 
@@ -38,7 +40,12 @@ class _StatingPageState extends State<StartingPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+           Route route = MaterialPageRoute(builder: (context) {
+            return const  AddOrEditPage("Add");
+          });
+          Navigator.of(context).push(route);
+        },
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

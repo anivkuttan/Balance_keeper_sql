@@ -1,159 +1,228 @@
+import 'package:balance_keeper_sql/Controllers/home_page_controller.dart';
+import 'package:balance_keeper_sql/Models/person_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class EditPage extends StatefulWidget {
-  const EditPage({Key? key}) : super(key: key);
+class AddOrEditPage extends StatefulWidget {
+  final String button;
+  final PersonModel? editedPerson;
+  const AddOrEditPage(
+    this.button, {
+    Key? key,
+    this.editedPerson,
+  }) : super(key: key);
 
   @override
-  State<EditPage> createState() => _EditPageState();
+  State<AddOrEditPage> createState() => _AddOrEditPageState();
 }
 
-class _EditPageState extends State<EditPage> {
-  late TextEditingController nameController;
-  late TextEditingController taskNameController;
-  late TextEditingController discriptionController;
+class _AddOrEditPageState extends State<AddOrEditPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController taskNameController = TextEditingController();
+  TextEditingController discriptionController = TextEditingController();
+  int amountCounter = 0;
+  final controller = Get.find<HomePageController>();
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController();
-    taskNameController = TextEditingController();
-    discriptionController = TextEditingController();
+    var editedPerson = widget.editedPerson;
+    if (editedPerson != null) {
+      nameController.text = editedPerson.name;
+      taskNameController.text = editedPerson.taskName ?? '';
+      discriptionController.text = editedPerson.discriptionText ?? '';
+    }
   }
 
+  SizedBox sizeBox = const SizedBox(
+    height: 20,
+  );
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit Person'),
+        title: Text("${widget.button} Person"),
       ),
-      body: Center(
-          child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 150,
-                    height: 100,
-                    child: TextFormField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                        label: Text('Name'),
-                        border: OutlineInputBorder(),
-                      ),
+      body: Form(
+        key: formKey,
+        // autovalidateMode: AutovalidateMode.always,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: 220,
+                          child: TextFormField(
+                            controller: nameController,
+                            decoration: InputDecoration(
+                              label: const Text('Name'),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(23),
+                              ),
+                            ),
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Please Enter Name';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        sizeBox,
+                        SizedBox(
+                          width: 220,
+                          child: TextFormField(
+                            controller: taskNameController,
+                            decoration: InputDecoration(
+                              label: const Text('TaskName'),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(23),
+                              ),
+                            ),
+                            validator: (text) {
+                              if (text == null || text.isEmpty) {
+                                return 'Please Enter Task Name';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        const CircleAvatar(
+                          radius: 60,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(23),
+                            ),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.edit),
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                sizeBox,
+                ListTile(
+                  title: const Text('Balance'),
+                  subtitle: Text("300 +($amountCounter)"),
+                  trailing: Text(
+                    '${300 + amountCounter}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
+                sizeBox,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              amountCounter -= 1;
+                            });
+                          },
+                          child: const Text("-1"),
+                        ),
+                        OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              amountCounter -= 10;
+                            });
+                          },
+                          onLongPress: () {
+                            setState(() {
+                              amountCounter -= 100;
+                            });
+                          },
+                          child: const Text("-10"),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      '$amountCounter',
+                      style: const TextStyle(fontSize: 80),
+                    ),
+                    Column(
+                      children: [
+                        OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              amountCounter += 1;
+                            });
+                          },
+                          child: const Text("+1"),
+                        ),
+                        OutlinedButton(
+                          onPressed: () {
+                            setState(() {
+                              amountCounter += 10;
+                            });
+                          },
+                          onLongPress: () {
+                            setState(() {
+                              amountCounter += 100;
+                            });
+                          },
+                          child: const Text("+10"),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                const SizedBox(height: 40),
+                TextFormField(
+                  controller: discriptionController,
+                  decoration: InputDecoration(
+                    label: const Text('Discription'),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(23),
                     ),
                   ),
-                  const Spacer(),
-                  const CircleAvatar(
-                    radius: 60,
+                  maxLines: 5,
+                ),
+                sizeBox,
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      final isFormValitated = formKey.currentState!.validate();
+                      if (isFormValitated) {
+                        final name = nameController.text;
+                        final amount = amountCounter;
+                        PersonModel newPerson = PersonModel(name: name, amount: amount);
+                        controller.personList.add(newPerson);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: widget.button == "Edit" ? const Text("Update") : const Text('Add Person'),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: taskNameController,
-                decoration: const InputDecoration(
-                  label: Text('TaskName'),
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                'Add Amount',
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  SubButtonleft(),
-                  Text(
-                    '0',
-                    style: TextStyle(fontSize: 150),
-                  ),
-                  SubButtonRigth(),
-                ],
-              ),
-              const ListTile(
-                title: Text('Balance'),
-                subtitle: Text('12+80'),
-                trailing: Text(
-                  '92',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-              TextFormField(
-                controller: discriptionController,
-                decoration: const InputDecoration(
-                  label: Text('Discription'),
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text('Discription'),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
-      )),
-    );
-  }
-}
-
-class SubButtonleft extends StatelessWidget {
-  const SubButtonleft({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        OutlinedButton(
-          onPressed: () {},
-          child: const Text("-1"),
-        ),
-        OutlinedButton(
-          onPressed: () {},
-          child: const Text("-10"),
-        ),
-      ],
-    );
-  }
-}
-
-class SubButtonRigth extends StatelessWidget {
-  const SubButtonRigth({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        OutlinedButton(
-          onPressed: () {},
-          child: const Text("+1"),
-        ),
-        OutlinedButton(
-          onPressed: () {},
-          child: const Text("+10"),
-        ),
-      ],
+      ),
     );
   }
 }

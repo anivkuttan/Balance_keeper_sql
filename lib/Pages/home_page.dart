@@ -1,6 +1,8 @@
+import 'package:balance_keeper_sql/Controllers/home_page_controller.dart';
 import 'package:balance_keeper_sql/Pages/edit_page.dart';
 import 'package:balance_keeper_sql/Pages/view_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,35 +12,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final controller = Get.put(HomePageController());
   List<Widget> item = [
-    const CircleAvatar(
-      backgroundColor: Colors.green,
-      radius: 30,
-    ),
-    const CircleAvatar(
-      backgroundColor: Colors.green,
-      radius: 30,
-    ),
-    const CircleAvatar(
-      backgroundColor: Colors.green,
-      radius: 30,
-    ),
-    const CircleAvatar(
-      backgroundColor: Colors.green,
-      radius: 30,
-    ),
-    const CircleAvatar(
-      backgroundColor: Colors.green,
-      radius: 30,
-    ),
-    const CircleAvatar(
-      backgroundColor: Colors.green,
-      radius: 30,
-    ),
-    const CircleAvatar(
-      backgroundColor: Colors.green,
-      radius: 30,
-    ),
     const CircleAvatar(
       backgroundColor: Colors.green,
       radius: 30,
@@ -79,9 +54,23 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Row(
                           children: [
-                            Container(height: 40, width: 60, color: Colors.pinkAccent),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.pink,
+                                borderRadius: BorderRadius.circular(23),
+                              ),
+                              height: 40,
+                              width: 60,
+                            ),
                             const SizedBox(width: 20),
-                            Container(height: 40, width: 60, color: Colors.purple),
+                            Container(
+                              height: 40,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 43, 18, 234),
+                                borderRadius: BorderRadius.circular(23),
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -99,19 +88,33 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 60,
               width: double.maxFinite,
-              child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    return const CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 35,
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(width: 10);
-                  },
-                  itemCount: item.length),
+              child: Obx(() {
+                return ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Route route = MaterialPageRoute(builder: (context) {
+                            return  AddOrEditPage("Edit",editedPerson: controller.personList[index],);
+                          });
+                          Navigator.push(context, route);
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                          radius: 35,
+                          child: Text(
+                            controller.personList[index].name[0].toUpperCase(),
+                            style: const TextStyle(fontSize: 25, color: Colors.black),
+                          ),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(width: 10);
+                    },
+                    itemCount: controller.personList.length);
+              }),
             ),
             const SizedBox(height: 30),
             SizedBox(
@@ -130,12 +133,7 @@ class _HomePageState extends State<HomePage> {
               height: 60,
               width: double.maxFinite,
               child: ElevatedButton(
-                onPressed: () {
-                    Route route = MaterialPageRoute(builder: (context) {
-                    return const EditPage();
-                  });
-                  Navigator.of(context).push(route);
-                },
+                onPressed: () {},
                 child: const Text(
                   'Add Amount To Some Person',
                   style: TextStyle(fontSize: 20),

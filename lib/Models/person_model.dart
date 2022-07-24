@@ -1,12 +1,12 @@
 class PersonModel {
   String name;
-  double amount;
-  String? discriptionText;
+  int amount;
   String? taskName;
+  String? discriptionText;
   PersonModel({
     required this.name,
     required this.amount,
-    this.discriptionText,
     this.taskName,
+    this.discriptionText,
   });
 }
