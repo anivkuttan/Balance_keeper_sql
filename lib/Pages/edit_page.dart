@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddOrEditPage extends StatefulWidget {
-  final String button;
+  final String buttonName;
   final PersonModel? editedPerson;
   const AddOrEditPage(
-    this.button, {
+    this.buttonName, {
     Key? key,
     this.editedPerson,
   }) : super(key: key);
@@ -30,6 +30,7 @@ class _AddOrEditPageState extends State<AddOrEditPage> {
       nameController.text = editedPerson.name;
       taskNameController.text = editedPerson.taskName ?? '';
       discriptionController.text = editedPerson.discriptionText ?? '';
+      amountCounter = editedPerson.amount;
     }
   }
 
@@ -41,7 +42,7 @@ class _AddOrEditPageState extends State<AddOrEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.button} Person"),
+        title: Text("${widget.buttonName} Person"),
       ),
       body: Form(
         key: formKey,
@@ -210,12 +211,19 @@ class _AddOrEditPageState extends State<AddOrEditPage> {
                       if (isFormValitated) {
                         final name = nameController.text;
                         final amount = amountCounter;
-                        PersonModel newPerson = PersonModel(name: name, amount: amount);
+                        final taskname = taskNameController.text;
+                        final discreption = discriptionController.text;
+                        PersonModel newPerson = PersonModel(
+                          name: name,
+                          amount: amount,
+                          taskName: taskname,
+                          discriptionText: discreption,
+                        );
                         controller.personList.add(newPerson);
                         Navigator.pop(context);
                       }
                     },
-                    child: widget.button == "Edit" ? const Text("Update") : const Text('Add Person'),
+                    child: widget.buttonName == "Edit" ? const Text("Update") : const Text('Add Person'),
                   ),
                 )
               ],

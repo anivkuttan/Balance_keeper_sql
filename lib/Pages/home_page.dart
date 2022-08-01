@@ -1,4 +1,5 @@
 import 'package:balance_keeper_sql/Controllers/home_page_controller.dart';
+import 'package:balance_keeper_sql/Pages/add_all_person_page.dart';
 import 'package:balance_keeper_sql/Pages/edit_page.dart';
 import 'package:balance_keeper_sql/Pages/view_page.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,10 @@ class _HomePageState extends State<HomePage> {
                       return InkWell(
                         onTap: () {
                           Route route = MaterialPageRoute(builder: (context) {
-                            return  AddOrEditPage("Edit",editedPerson: controller.personList[index],);
+                            return AddOrEditPage(
+                              "Edit",
+                              editedPerson: controller.personList[index],
+                            );
                           });
                           Navigator.push(context, route);
                         },
@@ -121,7 +125,14 @@ class _HomePageState extends State<HomePage> {
               height: 60,
               width: double.maxFinite,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return const AddAllPerson();
+                    }),
+                  );
+                },
                 child: const Text(
                   'Add Amount To all Person',
                   style: TextStyle(fontSize: 20),
